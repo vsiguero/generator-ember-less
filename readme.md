@@ -1,10 +1,17 @@
-# Ember.js Generator [![Build Status](https://secure.travis-ci.org/yeoman/generator-ember.png?branch=master)](http://travis-ci.org/yeoman/generator-ember)
+# Ember.js Generator with Less and other libraries [![Build Status](https://secure.travis-ci.org/vsiguero/generator-ember-less.png?branch=master)](http://travis-ci.org/vsiguero/generator-ember-less)
 
-Maintainer: [Anthony Bull](https://github.com/inkredabull)
+Maintainer: [Víctor Siguero](https://github.com/vsiguero)
 
-The scaffolding tool for Ember.js apps.
+The scaffolding tool for Ember.js apps with Less and other libraries, forked from generator-ember getting a "quick-starter" kit for developing with ease.
 
-![ScreenShot](https://raw.github.com/yeoman/generator-ember/master/project/img/screenshots/2013_07_17.png)
+This is a fork from generator-ember but using other libraries:
+- Bootstrap Less version using Grunt Recess
+- Ember Data & Ember Model for the developer to choose from (defaults to Ember Model)
+- Bootswatch Themes repo for Bootstrap 3.0.0 
+- Ember Bootstrap from Ember addons that adds Boostrap components as Ember components in views
+- Grunt Rsync taks for deploying to remote server with rsync/SSH
+
+![ScreenShot](https://raw.github.com/vsiguero/generator-ember-less/master/project/img/screenshots/2013_10_08.png)
 
 ## Table of Contents
 
@@ -36,7 +43,7 @@ You should have one path each for:
 
 ## Usage
 
-* `npm install -g generator-ember`
+* `npm install -g generator-ember-less`
 * `mkdir webapp && cd webapp`
 * `yo ember`
 * `npm install -g grunt-mocha` 
@@ -129,7 +136,7 @@ Manifests as: `You specified the templateName ... but it did not exist.`
 You probably added a view; restart the server.
 
 ## Changelog
-See the [changelog file](https://github.com/yeoman/generator-ember/blob/master/changelog.md)
+See the [changelog file](https://github.com/vsiguero/generator-ember-less/blob/master/changelog.md)
 
 ## TODO
 

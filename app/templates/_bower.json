@@ -2,9 +2,22 @@
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
   "dependencies": {
-    "ember": "1.0.0",
-    "ember-data-shim": "1.0.0-beta.2"<% if (compassBootstrap) { %>,
-    "bootstrap-sass": "~3.0.0"
+    "jquery": "~1.9.1",
+    "ember": "1.0.0"
+    <% if (emberModelLib === 'ember-model') { %>
+    ,"ember-model": "0.0.10"
+    <% } %>
+    <% if (emberModelLib === 'ember-data') { %>
+    ,"ember-data-shim": "1.0.*"
+    <% } %>
+    <% if (lessBootstrap) { %>
+    ,"bootstrap": "~3.0.0"
+    <% } %>
+    <% if (emberBootstrap) { %>
+    ,"ember-addons.bs_for_ember": "master"
+    <% } %>
+    <% if (lessBootswatch) { %>
+    ,"bootswatch": "~3.0.0"
     <% } %>
   },
   "resolutions": {

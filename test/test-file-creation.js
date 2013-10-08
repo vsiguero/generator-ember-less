@@ -33,7 +33,7 @@ describe('Basics', function () {
       }
 
       this.ember = {};
-      this.ember.app = helpers.createGenerator('ember:app', [
+      this.ember.app = helpers.createGenerator('ember-less:app', [
         '../../router',
         '../../app', [
           helpers.createDummyGenerator(),
@@ -41,7 +41,7 @@ describe('Basics', function () {
         ]
       ]);
       helpers.mockPrompt(this.ember.app, {
-        'compassBootstrap': true
+        'lessBootstrap': true
       });
       this.ember.app.options['coffee'] = false;
       this.ember.app.options['skip-install'] = true;

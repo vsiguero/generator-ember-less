@@ -1,22 +1,28 @@
 {
-  "name": "generator-ember",
-  "version": "0.6.2",
-  "description": "Yeoman generator for Ember",
+  "name": "generator-ember-less",
+  "version": "0.1.0",
+  "description": "Yeoman generator for Ember with Less and other libraries forked from original generator-ember",
   "keywords": [
     "yeoman-generator",
     "scaffold",
     "generator",
     "framework",
     "mvc",
-    "ember"
+    "ember",
+    "bootstrap",
+    "less"
   ],
-  "homepage": "https://github.com/yeoman/generator-ember",
-  "bugs": "https://github.com/yeoman/generator-ember/issues",
-  "author": "Chrome Developer Relations",
+  "homepage": "https://github.com/vsiguero/generator-ember-less",
+  "bugs": "https://github.com/vsiguero/generator-ember-less/issues",
+  "author": {
+    "name": "Víctor Siguero",
+    "email": "vsiguero@gmail.com",
+    "url": "https://github.com/vsiguero"
+  },
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/yeoman/generator-ember.git"
+    "url": "git://github.com/vsiguero/generator-ember-less.git"
   },
   "scripts": {
     "test": "mocha --reporter spec"

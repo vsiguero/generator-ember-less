@@ -28,7 +28,7 @@ module.exports = function (grunt) {
         yeoman: yeomanConfig,
         watch: {
             emberTemplates: {
-                files: '<%%= yeoman.app %>/templates/**/*.hbs',
+                files: '<%%= yeoman.app %>/templates/**/*.{hbs,handlebars}',
                 tasks: ['emberTemplates']
             },
             coffee: {
@@ -39,9 +39,9 @@ module.exports = function (grunt) {
                 files: ['test/spec/{,*/}*.coffee'],
                 tasks: ['coffee:test']
             },
-            compass: {
-                files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass:server']
+            recess: {
+                files: ['<%%= yeoman.app %>/styles/{,*/}*.less'],
+                tasks: ['recess:server']
             },
             neuter: {<% if (!options.coffee) { %>
                 files: ['<%%= yeoman.app %>/scripts/{,*/}*.js'],<% }else{ %>
@@ -163,25 +163,30 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        compass: {
+        recess: {
             options: {
-                sassDir: '<%%= yeoman.app %>/styles',
-                cssDir: '.tmp/styles',
-                generatedImagesDir: '.tmp/images/generated',
-                imagesDir: '<%%= yeoman.app %>/images',
-                javascriptsDir: '<%%= yeoman.app %>/scripts',
-                fontsDir: '<%%= yeoman.app %>/styles/fonts',
-                importPath: 'app/bower_components',
-                httpImagesPath: '/images',
-                httpGeneratedImagesPath: '/images/generated',
-                httpFontsPath: '/styles/fonts',
-                relativeAssets: false
+                compile: true
             },
-            dist: {},
             server: {
+                files: [{
+                    expand: true,
+                    cwd: '<%%= yeoman.app %>/styles',
+                    src: '{,*/}*.less',
+                    dest: '.tmp/styles/',
+                    ext: '.css'
+                }]
+            },
+            dist: {
                 options: {
-                    debugInfo: true
-                }
+                    compress: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%%= yeoman.app %>/styles',
+                    src: '{,*/}*.less',
+                    dest: '<%%= yeoman.dist %>/styles/',
+                    ext: '.css'
+                }]
             }
         },
         // not used since Uglify task does concat,
@@ -292,17 +297,17 @@ module.exports = function (grunt) {
             server: [
                 'emberTemplates',
                 'coffee:dist',
-                'compass:server'
+                'recess:server'
             ],
             test: [
                 'emberTemplates',
                 'coffee',
-                'compass'
+                'recess'
             ],
             dist: [
                 'emberTemplates',
                 'coffee',
-                'compass:dist',
+                'recess:dist',
                 'imagemin',
                 'svgmin',
                 'htmlmin'
@@ -322,7 +327,7 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    '.tmp/scripts/compiled-templates.js': '<%%= yeoman.app %>/templates/{,*/}*.hbs'
+                    '.tmp/scripts/compiled-templates.js': '<%%= yeoman.app %>/templates/{,*/}*.{hbs,handlebars}'
                 }
             }
         },<% if (!options.coffee) { %>
@@ -348,7 +353,29 @@ module.exports = function (grunt) {
                 src: ['.tmp/scripts/app.js'],
                 dest: '.tmp/scripts/combined-scripts.js'
             }
-        }<% } %>
+        }<% } %><% if (useRsync) { %>,
+        rsync: {
+            options: {
+                args: ["--verbose"],
+                exclude: [".git*","*.less","node_modules"],
+                recursive: true
+            },
+            dist: {
+                options: {
+                    src: "./",
+                    dest: "<%%= yeoman.dist %>"
+                }
+            },
+            deploy: {
+                options: {
+                    src: "<%%= yeoman.dist %>/",
+                    dest: "<%= deployDir %>",
+                    host: "<%= deployUser %>@<%= deployServer %>",
+                    syncDestIgnoreExcl: true
+                }
+            }
+        }
+        <% } %>
     });
 
     grunt.registerTask('server', function (target) {
@@ -389,6 +416,14 @@ module.exports = function (grunt) {
         'usemin'
     ]);
 
+    <% if (useRsync) { %>
+    grunt.registerTask('deploy', function (target) {
+        // TODO: Define several rsync environments for deployment
+        // and make calls like this rsync:<env>
+        return grunt.task.run(['build', 'rsync:deploy']);
+    });    
+
+    <% } %>
     grunt.registerTask('default', [
         'jshint',
         'test',

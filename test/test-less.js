@@ -21,7 +21,7 @@ var EXPECTED_FILES = [
   'app/index.html'
 ];
 
-describe('Compass', function () {
+describe('Less', function () {
 
   beforeEach(function (done) {
     helpers.testDirectory(path.join(__dirname, './temp'), function (err) {
@@ -29,7 +29,7 @@ describe('Compass', function () {
         return done(err);
       }
       this.ember = {};
-      this.ember.app = helpers.createGenerator('ember:app', [
+      this.ember.app = helpers.createGenerator('ember-less:app', [
         '../../router',
         '../../app', [
           helpers.createDummyGenerator(),
@@ -37,7 +37,7 @@ describe('Compass', function () {
         ]
       ]);
       helpers.mockPrompt(this.ember.app, {
-        'compassBootstrap': true
+        'lessBootstrap': true
       });
       this.ember.app.options['coffee'] = false;
       this.ember.app.options['skip-install'] = true;
@@ -45,10 +45,10 @@ describe('Compass', function () {
     }.bind(this));
   });
 
-  describe('compass', function () {
-    it('creates expected files without compassSass', function (done) {
+  describe('less', function () {
+    it('creates expected files without Recess / Less', function (done) {
       helpers.mockPrompt(this.ember.app, {
-        'compassBootstrap': false
+        'lessBootstrap': false
       });
       this.ember.app.run({}, function () {
         helpers.assertFiles(EXPECTED_FILES);
@@ -57,7 +57,7 @@ describe('Compass', function () {
       });
     });
 
-    it('creates expected files with compassSass', function (done) {
+    it('creates expected files with Recess / Less', function (done) {
       this.ember.app.run({}, function () {
         helpers.assertFiles(EXPECTED_FILES);
         done();

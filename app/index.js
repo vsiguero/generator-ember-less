@@ -3,14 +3,14 @@ var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 
-var EmberGenerator = module.exports = function EmberGenerator(args, options) {
+var EmberLessGenerator = module.exports = function EmberLessGenerator(args, options) {
   yeoman.generators.Base.apply(this, arguments);
 
   if (this.appname.match(/^[Ee]mber$/)) {
     this.appname += '_app';
   }
 
-  this.hookFor('ember:router');
+  this.hookFor('ember-less:router');
 
   // setup the test-framework property, Gruntfile template will need this
   this.testFramework = options['test-framework'] || 'mocha';
@@ -34,10 +34,10 @@ var EmberGenerator = module.exports = function EmberGenerator(args, options) {
 
   // this holds the list of scripts we want to include in components.js
   this.bowerScripts = [
+    'bower_components/console-polyfill/index.js',
     'bower_components/jquery/jquery.js',
-    'bower_components/handlebars/handlebars.runtime.js',
-    'bower_components/ember/ember.js',
-    'bower_components/ember-data-shim/ember-data.js'
+    'bower_components/handlebars/handlebars.js',
+    'bower_components/ember/ember.js'
   ];
 
   this.on('end', function () {
@@ -45,35 +45,113 @@ var EmberGenerator = module.exports = function EmberGenerator(args, options) {
   });
 };
 
-util.inherits(EmberGenerator, yeoman.generators.Base);
+util.inherits(EmberLessGenerator, yeoman.generators.Base);
 
-EmberGenerator.prototype._getJSPath = function _getJSPath(file) {
+EmberLessGenerator.prototype._getJSPath = function _getJSPath(file) {
   return file + (this.options.coffee ? '.coffee' : '.js');
 };
 
-EmberGenerator.prototype.welcome = function welcome() {
+EmberLessGenerator.prototype.welcome = function welcome() {
   // welcome message
   console.log(this.yeoman);
 };
 
-EmberGenerator.prototype.askFor = function askFor() {
+EmberLessGenerator.prototype.askFor = function askFor() {
   var cb = this.async();
 
-  var prompts = [{
+  var prompts = [];
+
+  prompts.push({
+    type : "input",
+    name : "name",
+    message : "Your project name",
+    default : this.appname // Default to current folder name
+  });
+
+  prompts.push({
+    name : "emberModelLib",
+    type : "list",
+    message : "Which model/store libe do you want to use?",
+    choices : [ "Ember-Data", "Ember-Model" ],
+    filter : function(v) { return v.toLowerCase(); }
+  });
+
+  prompts.push({
     type: 'confirm',
-    name: 'compassBootstrap',
-    message: 'Would you like to include Twitter Bootstrap for Sass?',
+    name: 'lessBootstrap',
+    message: 'Would you like to include Twitter Bootstrap 3.0.0?',
     default: true
-  }];
+  });
+
+  prompts.push({
+    type: 'confirm',
+    name: 'emberBootstrap',
+    message: 'Would you like to include Ember-components Bootstrap for Ember?',
+    default: true
+  });
+
+  prompts.push({
+    type: 'confirm',
+    name: 'lessBootswatch',
+    message: 'Would you like to include Bootswatch templates for Bootstrap 3.0.0?',
+    default: true
+  });
+
+  prompts.push({
+    type: 'confirm',
+    name: 'useRsync',
+    message: 'Would you like to use rsync deployment to server using SSH?',
+    default: true
+  });
+
+  prompts.push({
+    type : 'input',
+    name : 'deployServer',
+    message : 'Your project deployment server full URL',
+    default : 'my-server.com',
+    when : function (answers) {
+      return answers.useRsync;
+    }
+  });  
+
+  prompts.push({
+    type :  'input',
+    name :  'deployUser',
+    message : 'Your project deployment SSH / Rsync username',
+    default : 'myusername',
+    when : function (answers) {
+      return answers.useRsync;
+    }
+  });   
+
+  prompts.push({
+    type : 'input',
+    name : 'deployDir',
+    message : 'Your project deployment absolute path',
+    default : '/my/server/path/to-deploy-folder/',
+    when : function (answers) {
+      return answers.useRsync;
+    }
+  });      
 
   this.prompt(prompts, function (props) {
-    this.compassBootstrap = props.compassBootstrap;
+    this.config.set(props);
+    this.lessBootstrap = props.lessBootstrap;
+    this.emberBootstrap = props.emberBootstrap;
+    this.lessBootswatch = props.lessBootswatch;
+    this.emberModelLib = props.emberModelLib;
+    this.useRsync = props.useRsync;    
+    this.deployDir = props.deployDir;    
+    this.deployUser = props.deployUser;    
+    this.deployServer = props.deployServer;    
+
+    this.pkg.name = this.config.get("name");
 
     cb();
   }.bind(this));
 };
 
-EmberGenerator.prototype.createDirLayout = function createDirLayout() {
+EmberLessGenerator.prototype.createDirLayout = function createDirLayout() {
   this.mkdir('app/templates');
   this.mkdir('app/styles');
   this.mkdir('app/images');
@@ -84,25 +162,25 @@ EmberGenerator.prototype.createDirLayout = function createDirLayout() {
   this.mkdir('app/scripts/views');
 };
 
-EmberGenerator.prototype.git = function git() {
+EmberLessGenerator.prototype.git = function git() {
   this.copy('gitignore', '.gitignore');
   this.copy('gitattributes', '.gitattributes');
 };
 
-EmberGenerator.prototype.bower = function bower() {
+EmberLessGenerator.prototype.bower = function bower() {
   this.copy('bowerrc', '.bowerrc');
   this.copy('_bower.json', 'bower.json');
 };
 
-EmberGenerator.prototype.packageFile = function packageFile() {
+EmberLessGenerator.prototype.packageFile = function packageFile() {
   this.copy('_package.json', 'package.json');
 };
 
-EmberGenerator.prototype.jshint = function jshint() {
+EmberLessGenerator.prototype.jshint = function jshint() {
   this.copy('_jshintrc', '.jshintrc');
 };
 
-EmberGenerator.prototype.tests = function tests() {
+EmberLessGenerator.prototype.tests = function tests() {
   if (this.options.karma) {
     this.mkdir('test');
     this.mkdir('test/support');
@@ -114,22 +192,22 @@ EmberGenerator.prototype.tests = function tests() {
   }
 };
 
-EmberGenerator.prototype.editorConfig = function editorConfig() {
+EmberLessGenerator.prototype.editorConfig = function editorConfig() {
   this.copy('editorconfig', '.editorconfig');
 };
 
-EmberGenerator.prototype.gruntfile = function gruntfile() {
+EmberLessGenerator.prototype.gruntfile = function gruntfile() {
   this.template('Gruntfile.js');
 };
 
-EmberGenerator.prototype.templates = function templates() {
+EmberLessGenerator.prototype.templates = function templates() {
   this.copy('hbs/application.hbs', 'app/templates/application.hbs');
   this.copy('hbs/index.hbs', 'app/templates/index.hbs');
 };
 
-EmberGenerator.prototype.writeIndex = function writeIndex() {
+EmberLessGenerator.prototype.writeIndex = function writeIndex() {
   var mainCssFiles = [];
-  if (this.compassBootstrap) {
+  if (this.lessBootstrap) {
     mainCssFiles.push('styles/style.css');
   } else {
     mainCssFiles.push('styles/normalize.css');
@@ -138,38 +216,67 @@ EmberGenerator.prototype.writeIndex = function writeIndex() {
 
   this.indexFile = this.appendStyles(this.indexFile, 'styles/main.css', mainCssFiles);
 
+  if (this.config.get("emberModelLib") === 'ember-data') {
+    this.bowerScripts.push(
+      'bower_components/ember-data-shim/ember-data.js'
+    );
+  } else if (this.config.get("emberModelLib") === 'ember-model') {
+    this.bowerScripts.push(
+      'bower_components/ember-model/ember-model.js'
+    );
+  } 
+
   this.indexFile = this.appendScripts(this.indexFile, 'scripts/components.js', this.bowerScripts);
 
   this.indexFile = this.appendFiles(this.indexFile, 'js', 'scripts/templates.js', ['scripts/compiled-templates.js'], null, '.tmp');
   this.indexFile = this.appendFiles(this.indexFile, 'js', 'scripts/main.js', ['scripts/combined-scripts.js'], null, '.tmp');
 };
 
-EmberGenerator.prototype.bootstrapJavaScript = function bootstrapJavaScript() {
-  if (!this.compassBootstrap) {
+EmberLessGenerator.prototype.bootstrapJavaScript = function bootstrapJavaScript() {
+  if (!this.lessBootstrap) {
     return;  // Skip if disabled.
   }
   // Wire Twitter Bootstrap plugins
   this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
-    'bower_components/bootstrap-sass/js/affix.js',
-    'bower_components/bootstrap-sass/js/alert.js',
-    'bower_components/bootstrap-sass/js/dropdown.js',
-    'bower_components/bootstrap-sass/js/tooltip.js',
-    'bower_components/bootstrap-sass/js/modal.js',
-    'bower_components/bootstrap-sass/js/transition.js',
-    'bower_components/bootstrap-sass/js/button.js',
-    'bower_components/bootstrap-sass/js/popover.js',
-    'bower_components/bootstrap-sass/js/carousel.js',
-    'bower_components/bootstrap-sass/js/scrollspy.js',
-    'bower_components/bootstrap-sass/js/collapse.js',
-    'bower_components/bootstrap-sass/js/tab.js'
+    'bower_components/bootstrap/js/affix.js',
+    'bower_components/bootstrap/js/alert.js',
+    'bower_components/bootstrap/js/dropdown.js',
+    'bower_components/bootstrap/js/tooltip.js',
+    'bower_components/bootstrap/js/modal.js',
+    'bower_components/bootstrap/js/transition.js',
+    'bower_components/bootstrap/js/button.js',
+    'bower_components/bootstrap/js/popover.js',
+    'bower_components/bootstrap/js/carousel.js',
+    'bower_components/bootstrap/js/scrollspy.js',
+    'bower_components/bootstrap/js/collapse.js',
+    'bower_components/bootstrap/js/tab.js'
+  ]);
+
+  if (!this.emberBootstrap) {
+    return;  // Skip if disabled.
+  }
+  // Wire Ember Components - Bootstrap for Ember
+  this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-core.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-basic.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-alert.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-badge.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-button.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-label.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-list-group.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-modal.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-nav.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-progressbar.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-notifications.max.js',
+    'bower_components/ember-addons.bs_for_ember/dist/js/bs-wizard.max.js'
   ]);
 };
 
-EmberGenerator.prototype.all = function all() {
+EmberLessGenerator.prototype.all = function all() {
   this.write('app/index.html', this.indexFile);
 
-  if (this.compassBootstrap) {
-    this.copy('styles/style_bootstrap.scss', 'app/styles/style.scss');
+  if (this.lessBootstrap) {
+    this.copy('styles/style_bootstrap.less', 'app/styles/style.less');
   } else {
     this.copy('styles/normalize.css', 'app/styles/normalize.css');
     this.copy('styles/style.css', 'app/styles/style.css');
