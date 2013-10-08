@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Generator-ember-less by vsiguero</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Generator-ember-less</h1>
+          <h2>Yeoman generator for Ember with Less support</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/vsiguero/generator-ember-less/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/vsiguero/generator-ember-less/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/vsiguero/generator-ember-less" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="emberjs-generator-with-less-and-other-libraries-" class="anchor" href="#emberjs-generator-with-less-and-other-libraries-"><span class="octicon octicon-link"></span></a>Ember.js Generator with Less and other libraries <a href="http://travis-ci.org/vsiguero/generator-ember-less"><img src="https://secure.travis-ci.org/vsiguero/generator-ember-less.png?branch=master" alt="Build Status"></a>
+</h1>
+
+<p>Maintainer: <a href="https://github.com/vsiguero">Víctor Siguero</a></p>
+
+<p>The scaffolding tool for Ember.js apps with Less and other libraries, forked from generator-ember getting a "quick-starter" kit for developing with ease.</p>
+
+<p>This is a fork from generator-ember but using other libraries:</p>
+
+<ul>
+<li>Bootstrap Less version using Grunt Recess</li>
+<li>Ember Data &amp; Ember Model for the developer to choose from (defaults to Ember Model)</li>
+<li>Bootswatch Themes repo for Bootstrap 3.0.0 </li>
+<li>Ember Bootstrap from Ember addons that adds Boostrap components as Ember components in views</li>
+<li>Grunt Rsync taks for deploying to remote server with rsync/SSH</li>
+</ul><p><img src="https://raw.github.com/vsiguero/generator-ember-less/master/project/img/screenshots/2013_10_08.png" alt="ScreenShot"></p>
+
+<h2>
+<a name="table-of-contents" class="anchor" href="#table-of-contents"><span class="octicon octicon-link"></span></a>Table of Contents</h2>
+
+<ul>
+<li><a href="#pre-reqs">Pre-reqs</a></li>
+<li><a href="#usage">Usage</a></li>
+<li>
+<a href="#generators">Generators</a>
+
+<ul>
+<li><a href="#ember-model">ember-model</a></li>
+<li><a href="#ember-view">ember-view</a></li>
+<li><a href="#ember-controller">ember-controller</a></li>
+</ul>
+</li>
+<li><a href="#options">Options</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#changelog">Changelog</a></li>
+<li><a href="#todo">TODO</a></li>
+<li>
+<a href="#contribute">Contribute</a>
+
+<ul>
+<li><a href="#basics">Basics</a></li>
+<li><a href="#tips">Tips</a></li>
+</ul>
+</li>
+<li><a href="#background">Background</a></li>
+<li><a href="#license">License</a></li>
+</ul><h2>
+<a name="pre-reqs" class="anchor" href="#pre-reqs"><span class="octicon octicon-link"></span></a>Pre-reqs</h2>
+
+<ul>
+<li><a href="http://nodejs.org/">npm</a></li>
+<li><code>npm install -g grunt-contrib-compass</code></li>
+<li>Ruby </li>
+</ul><p>You should have one path each for:</p>
+
+<p><code>which ruby &amp;&amp; which compass</code></p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<ul>
+<li><code>npm install -g generator-ember-less</code></li>
+<li><code>mkdir webapp &amp;&amp; cd webapp</code></li>
+<li><code>yo ember</code></li>
+<li>
+<code>npm install -g grunt-mocha</code> </li>
+<li><code>grunt server</code></li>
+</ul><p>A welcome page should appear in your browser.</p>
+
+<h2>
+<a name="generators" class="anchor" href="#generators"><span class="octicon octicon-link"></span></a>Generators</h2>
+
+<p>Add'l generators:</p>
+
+<ul>
+<li>ember:model</li>
+<li>ember:view</li>
+<li>ember:controller</li>
+</ul><h3>
+<a name="embermodel" class="anchor" href="#embermodel"><span class="octicon octicon-link"></span></a>ember:model</h3>
+
+<p>Creates a model, views, handlebars, controllers, view/edit routes, and some basic fixtures given an arg, as in: </p>
+
+<p><code>yo ember:model User name:string zipcode:number</code></p>
+
+<p>see:</p>
+
+<ul>
+<li>http://localhost:9000/#/users</li>
+</ul><p>see also:</p>
+
+<ul>
+<li>http://localhost:9000/#/user/1</li>
+<li>http://localhost:9000/#/user/1/edit</li>
+</ul><h3>
+<a name="emberview" class="anchor" href="#emberview"><span class="octicon octicon-link"></span></a>ember:view</h3>
+
+<p>Creates a view and template given an arg, as in</p>
+
+<p><code>yo ember:view Foo</code></p>
+
+<p><strong>KNOWN ISSUE: IF YOU ADD A NEW VIEW, REGARDLESS OF WITH WHICH GENERATOR, YOU HAVE TO RESTART THE SERVER.</strong> </p>
+
+<h3>
+<a name="embercontroller" class="anchor" href="#embercontroller"><span class="octicon octicon-link"></span></a>ember:controller</h3>
+
+<p>Creates a view, handlebar, controller and route given an arg, as in:</p>
+
+<p><code>yo ember:controller Bar</code></p>
+
+<p>(and updates router.js, overwrite when prompted)</p>
+
+<p>see: </p>
+
+<ul>
+<li>http://localhost:9000/#/bar</li>
+</ul><h2>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<ul>
+<li>
+<p><code>--skip-install</code></p>
+
+<p>Skips the automatic execution of <code>bower</code> and <code>npm</code> after scaffolding has finished.</p>
+</li>
+<li>
+<p><code>--test-framework=[framework]</code></p>
+
+<p>Defaults to <code>mocha</code>. Can be switched for another supported testing framework like <code>jasmine</code>.</p>
+</li>
+<li>
+<p><code>--coffee</code></p>
+
+<p>Enable support for CoffeeScript.</p>
+</li>
+<li>
+<p><code>--karma</code></p>
+
+<p>Enables support for karma test runner</p>
+</li>
+</ul><h2>
+<a name="testing" class="anchor" href="#testing"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>Testing your app is as simple as running <code>grunt test</code>. The generator ships with the
+<a href="http://karma-runner.github.io/0.8/index.html">karma test runner</a> for running the tests. Integration
+tests are written with <a href="https://github.com/emberjs/ember.js/tree/master/packages/ember-testing">ember-testing</a>
+and preferably mocha. Karma is highly configurable and you can take a look at the varity of options
+on <a href="http://karma-runner.github.io/0.8/index.html">its website</a>.</p>
+
+<h2>
+<a name="troubleshooting" class="anchor" href="#troubleshooting"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<h3>
+<a name="command-not-found" class="anchor" href="#command-not-found"><span class="octicon octicon-link"></span></a>Command not found</h3>
+
+<p>Manifests as: <code>-bash: yo: command not found</code></p>
+
+<p>You need to make sure that npm is on your path.  Add the following to your .bash_profile (or .bashrc):</p>
+
+<p><code>PATH=/usr/local/share/npm/bin:$PATH</code></p>
+
+<h3>
+<a name="templatename-issues" class="anchor" href="#templatename-issues"><span class="octicon octicon-link"></span></a>templateName issues</h3>
+
+<p>Manifests as: <code>You specified the templateName ... but it did not exist.</code></p>
+
+<p>You probably added a view; restart the server.</p>
+
+<h2>
+<a name="changelog" class="anchor" href="#changelog"><span class="octicon octicon-link"></span></a>Changelog</h2>
+
+<p>See the <a href="https://github.com/vsiguero/generator-ember-less/blob/master/changelog.md">changelog file</a></p>
+
+<h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+
+<ul>
+<li>Change tests to instantiate and test objects instead of grepping for text</li>
+<li>DRY up/refactor tests</li>
+<li>Consider ES6 as base structure</li>
+<li>Remove Ruby dependency</li>
+</ul><h2>
+<a name="contribute" class="anchor" href="#contribute"><span class="octicon octicon-link"></span></a>Contribute</h2>
+
+<h3>
+<a name="basics" class="anchor" href="#basics"><span class="octicon octicon-link"></span></a>Basics</h3>
+
+<p>See the <a href="https://github.com/yeoman/yeoman/blob/master/contributing.md">contributing docs</a></p>
+
+<p>When submitting an issue, please follow the <a href="https://github.com/yeoman/yeoman/blob/master/contributing.md#issue-submission">guidelines</a>. Especially important is to make sure Yeoman is up-to-date, and providing the command or commands that cause the issue.</p>
+
+<p>When submitting a bugfix, write a test that exposes the bug and fails before applying your fix. Submit the test alongside the fix.</p>
+
+<p>When submitting a new feature, add tests that cover the feature.</p>
+
+<h3>
+<a name="tips" class="anchor" href="#tips"><span class="octicon octicon-link"></span></a>Tips</h3>
+
+<p>Here are some of the techniques I use; maybe they're useful for you.</p>
+
+<p>When developing...</p>
+
+<ul>
+<li>in generator-ember dir, <code>npm link</code> to use what's in the local repo for <code>yo ember</code>
+</li>
+<li>wipe the example webapp dir clean (<code>cd .. &amp;&amp; rm -rf webapp</code>) from time-to-time to ensure the code output is coming from the latest generator (will re-install everything via npm, so be forewarned)</li>
+<li>script/reset_dev_env.sh is there to help when you don't want to wipe and reinstall a test dir with Bower and Node modules again-and-again; read it and understand it before you use it. It's good
+if you want to smoke-test changes, bad if you update Bower and/or Node
+mods (ignores removing their subdirs.)</li>
+</ul><h2>
+<a name="background" class="anchor" href="#background"><span class="octicon octicon-link"></span></a>Background</h2>
+
+<ul>
+<li>Originally inspired by the <a href="https://github.com/emberjs/starter-kit/archive/v1.0.0-rc.6.zip">Ember Starter Kit</a>
+</li>
+<li>Taking influence from <a href="https://github.com/dgeb/ember_data_example">ember_data_example</a>
+</li>
+</ul><h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="http://opensource.org/licenses/bsd-license.php">BSD license</a></p>
+        </section>
+
+        <footer>
+          Generator-ember-less is maintained by <a href="https://github.com/vsiguero">vsiguero</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-8614220-5");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
